@@ -1,0 +1,46 @@
+# ActiveVision — Experiment Configuration Format
+# ================================================
+# Proposed as part of GSoC 2026 Experiment Engine design
+# Author: Apurva Sharma
+
+experiment:
+  name: vlm_benchmark_v1
+  description: "Compare traditional models vs VLMs on goal-directed tasks"
+
+  # Models to evaluate (all must be registered in model_registry.py)
+  models:
+    - IRL
+    - HAT
+    - LLaVA-1.5    # vision-language model
+    - InstructBLIP  # vision-language model
+
+  # Datasets to evaluate on
+  datasets:
+    - COCO-Search18
+
+  # Metrics to compute
+  metrics:
+    - AUC
+    - NSS
+    - ScanMatch
+
+  # Task-conditioned evaluation (Pillar 4 — novel contribution)
+  # Evaluates models separately per task type
+  task_conditions:
+    - free_viewing
+    - visual_search
+
+  # Text prompt for VLMs — {target_object} filled from dataset labels
+  task_prompt: "Find the {target_object} in the image."
+
+  # Output configuration
+  output_dir: results/vlm_benchmark_v1
+  output_format: json   # standardized JSON schema
+
+  # Slurm configuration for Compute Canada
+  slurm:
+    enabled: true
+    job_name: vlm_benchmark_v1
+    gpus: 1
+    mem: 16G
+    time: "04:00:00"
